@@ -3,17 +3,18 @@ import * as XLSX from "xlsx";
 
 const Table = () => {
   const [items, setItems] = useState([]);
+  const [asignatura, setAsignatura] = useState("");
+  const [profesor, setProfesor] = useState("");
+  const [grupo, setGrupo] = useState("");
 
-  const getInfoAsignatura = (stringx) => {
-    let coincidencia = stringx.match(/ASIGNATURA: (\w+) (\w+) Gr.: (\d+)/);
-    if (coincidencia) {
-      return (
-        coincidencia[1] + " " + coincidencia[2] + " Grupo: " + coincidencia[3]
-      );
-    } else {
-      return null;
+  function capitalizeWords(str) {
+    let words = str.split(" ");
+    for (let i = 0; i < words.length; i++) {
+      words[i] =
+        words[i].charAt(0).toUpperCase() + words[i].slice(1).toLowerCase();
     }
-  };
+    return words.join(" ");
+  }
 
   const readExcel = async (file) => {
     const fileReader = new FileReader();
@@ -34,12 +35,51 @@ const Table = () => {
         const subject = subject_data[0];
         const teacher = subject_data[1];
 
-        const asignatura = subject["SISTEMA DE REGISTRO ACADÉMICO Y ADMISIONES (SRA)"];
-        console.log(asignatura);
-        console.log(
-          teacher["SISTEMA DE REGISTRO ACADÉMICO Y ADMISIONES (SRA)"]
-        );
-        console.log("STUDENTS", students_data);
+        const handleGroup = (str) => {
+          setGrupo(str);
+        };
+
+        function getSubjectInfo(str) {
+          let espacio = " ";
+          let coincide = null;
+
+          let coincidencia = str.match(
+            /ASIGNATURA: ([\wÀ-ÿ]+) ([\w\sÀ-ÿ]+) Gr.: (\d+)/
+          );
+
+          if (coincidencia) {
+            coincide = coincidencia[1].concat(espacio, coincidencia[2]);
+            handleGroup("Grupo: ".concat(coincidencia[3]));
+          }
+          return coincide;
+        }
+
+        const asignatura =
+          subject["SISTEMA DE REGISTRO ACADÉMICO Y ADMISIONES (SRA)"];
+
+        function getTeacherInfo(str) {
+          let espacio = " ";
+          let coincidencia = str.match(/PROFESOR: (\w+) (\w+) (\w+)/);
+          if (coincidencia) {
+            return "Profesor:".concat(
+              espacio,
+              coincidencia[1],
+              espacio,
+              coincidencia[2],
+              espacio,
+              coincidencia[3]
+            );
+          } else {
+            return null;
+          }
+        }
+
+        const teacher_name =
+          teacher["SISTEMA DE REGISTRO ACADÉMICO Y ADMISIONES (SRA)"];
+
+        setAsignatura(getSubjectInfo(asignatura));
+        setProfesor(getTeacherInfo(teacher_name));
+
         resolve(students_data);
       };
 
@@ -62,26 +102,39 @@ const Table = () => {
 
   const clearTable = () => {
     setItems([]);
-    document.getElementById("file-upload").value = "";
+    setAsignatura("");
+    setProfesor("");
   };
 
   return (
     <div className="container">
+      {asignatura !== "" ? (
+        <div className="table-header">
+          <h2>
+            {asignatura} <br /> {grupo} <br /> {capitalizeWords(profesor)}{" "}
+          </h2>
+        </div>
+      ) : null}
       <div className="upload-container">
-        <label htmlFor="file-upload" className="custom-file-upload">
-          Cargar datos asignatura
-        </label>
-        <input
-          id="file-upload"
-          type="file"
-          onChange={(e) => {
-            const file = e.target.files[0];
-            readExcel(file);
-          }}
-        />
-        <button onClick={clearTable} className="custom-file-button">
-          Limpiar tabla
-        </button>
+        {items.length === 0 ? (
+          <div> 
+            <label htmlFor="file-upload" className="custom-file-upload">
+              Cargar datos asignatura
+            </label>
+            <input
+              id="file-upload"
+              type="file"
+              onChange={(e) => {
+                const file = e.target.files[0];
+                readExcel(file);
+              }}
+            />
+          </div>
+        ) : (
+          <button onClick={clearTable} className="custom-file-button">
+            Limpiar tabla
+          </button>
+        )}
       </div>
 
       <div className="table-container">

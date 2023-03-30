@@ -64,7 +64,7 @@ body,
 .custom-file-button {
   font-size: medium;
   display: inline-block;
-  padding: 1px 12px;
+  padding: 6px 12px;
   cursor: pointer;
   background-color: #cd1f32;
   color: white;
@@ -76,4 +76,9 @@ body,
 .upload-container {
   display: flex;
   column-gap: 2rem;
+  margin: 2rem 0;
+}
+
+.table-header {
+  text-align: center;
 }
