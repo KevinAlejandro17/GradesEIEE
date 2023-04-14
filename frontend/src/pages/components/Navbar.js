@@ -37,7 +37,7 @@ const Navbar = () => {
   };
 
   return (
-    <AppBar position="fixed" top={0} left={0} height="60px">
+    <AppBar position="fixed" top={0} right={0} height="60px">
       <Box sx={{display:"flex"}}>
         <Toolbar disableGutters sx={{display:"flex", columnGap: 2, backgroundColor: "#cd1f32", width: "100%"}}>
         <img src={"univalle_logo.jpg"} alt="logo" height="60px"/>
