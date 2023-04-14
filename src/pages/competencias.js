@@ -5,7 +5,6 @@ import Table from "./components/Table";
 import { createSCC, getSCCs } from "../../lib/SCCApi";
 import { Box, Container } from "@mui/material/";
 import Side from "./components/Sidebar";
-import { ProSidebarProvider } from "react-pro-sidebar";
 
 const Competencias = () => {
   const [id, setId] = useState("");
@@ -17,9 +16,9 @@ const Competencias = () => {
   const handleSubmit = (event) => {
     event.preventDefault();
     createSCC({ id, nombre, descripcion });
-    setId('');
-    setNombre('');
-    setDescripcion('');
+    setId("");
+    setNombre("");
+    setDescripcion("");
     setRefresh(true);
     setTimeout(() => {
       setRefresh(false);
@@ -38,62 +37,60 @@ const Competencias = () => {
 
   return (
     <>
-      <ProSidebarProvider>
-        <Box sx={{ mb: "80px" }}>
-          <Navbar />
-        </Box>
-        <Box sx={{ display: "flex", flexDirection: "row" }}>
-          <Side />
-          <Container>
-            <form onSubmit={handleSubmit}>
-              <h1>Agregar SCC</h1>
-              <div className="grid">
-                <label htmlFor="id">ID:</label>
-                <input
-                  type="text"
-                  id="id"
-                  value={id}
-                  onChange={(e) => setId(e.target.value)}
-                />
-                <label htmlFor="nombre">Nombre:</label>
-                <input
-                  type="text"
-                  id="nombre"
-                  value={nombre}
-                  onChange={(e) => setNombre(e.target.value)}
-                />
-                <label htmlFor="descripcion">Descripción:</label>
-                <input
-                  type="text"
-                  id="descripcion"
-                  value={descripcion}
-                  onChange={(e) => setDescripcion(e.target.value)}
-                />
-              </div>
-              <input type="submit" value="Agregar" />
-            </form>
+      <Box sx={{ mb: "80px" }}>
+        <Navbar />
+      </Box>
+      <Box sx={{ display: "flex", flexDirection: "row" }}>
+        <Side />
+        <Container>
+          <form onSubmit={handleSubmit}>
+            <h1>Agregar SCC</h1>
+            <div className="grid">
+              <label htmlFor="id">ID:</label>
+              <input
+                type="text"
+                id="id"
+                value={id}
+                onChange={(e) => setId(e.target.value)}
+              />
+              <label htmlFor="nombre">Nombre:</label>
+              <input
+                type="text"
+                id="nombre"
+                value={nombre}
+                onChange={(e) => setNombre(e.target.value)}
+              />
+              <label htmlFor="descripcion">Descripción:</label>
+              <input
+                type="text"
+                id="descripcion"
+                value={descripcion}
+                onChange={(e) => setDescripcion(e.target.value)}
+              />
+            </div>
+            <input type="submit" value="Agregar" />
+          </form>
 
-            <table className="scc-table">
-              <thead>
-                <tr>
-                  <th>ID</th>
-                  <th>Nombre</th>
-                  <th>Descripción</th>
+          <table className="scc-table">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Nombre</th>
+                <th>Descripción</th>
+              </tr>
+            </thead>
+            <tbody>
+              {sccs.map((scc) => (
+                <tr key={scc.id}>
+                  <td>{scc.id}</td>
+                  <td>{scc.nombre}</td>
+                  <td>{scc.descripcion}</td>
                 </tr>
-              </thead>
-              <tbody>
-                {sccs.map((scc) => (
-                  <tr key={scc.id}>
-                    <td>{scc.id}</td>
-                    <td>{scc.nombre}</td>
-                    <td>{scc.descripcion}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </Container>
-        </Box>
-      </ProSidebarProvider>
+              ))}
+            </tbody>
+          </table>
+        </Container>
+      </Box>
     </>
   );
 };
