@@ -71,6 +71,7 @@ const Competencias = () => {
             <input type="submit" value="Agregar" />
           </form>
 
+
           <table className="scc-table">
             <thead>
               <tr>
