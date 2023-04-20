@@ -4,12 +4,10 @@ import Table from "./components/Table";
 
 import { Box, Container } from "@mui/material/";
 import Side from "./components/Sidebar";
-import { ProSidebarProvider } from "react-pro-sidebar";
 
 const Home = () => {
   return (
     <>
-      <ProSidebarProvider>
         <Box sx={{ mb: "80px" }}>
           <Navbar />
         </Box>
@@ -19,7 +17,6 @@ const Home = () => {
             <Table />
           </Container>
         </Box>
-      </ProSidebarProvider>
     </>
   );
 };
